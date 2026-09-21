@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TJ's Community Autumn Haul Rater | Shared Fall Seasonal Reviews</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            tjpumpkin: '#D95D24',
+            tjrust: '#A83A1B',
+            tjcinnamon: '#6B3419',
+            tjsage: '#4E6B50',
+            tjcream: '#FBF7EE',
+            tjdarkcream: '#F3E9DA',
+            tjyellow: '#EAA43A',
+            tjblackboard: '#242826',
+            tjred: '#B92929'
+          },
+          fontFamily: {
+            sans: ['Cabin', 'system-ui', 'sans-serif'],
+            serif: ['Playfair Display', 'Merriweather', 'serif'],
+            heading: ['Patua One', 'Playfair Display', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- Google Fonts: Cabin & Patua One -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400;0,600;0,700;1,400&family=Patua+One&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    body {
+      background-color: #F7F1E5;
+      font-family: 'Cabin', sans-serif;
+      color: #31261D;
+    }
+    
+    .tj-heading {
+      font-family: 'Patua One', serif;
+      letter-spacing: -0.01em;
+    }
+    
+    .grocery-card {
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+      background: #FFFDF9;
+      border: 2px solid #E8DAC6;
+    }
+    .grocery-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 30px -10px rgba(107, 52, 25, 0.15);
+    }
+
+    .stamp-badge {
+      font-family: 'Patua One', cursive;
+      text-transform: uppercase;
+      transform: rotate(-2deg);
+      box-shadow: 1px 2px 0px rgba(0,0,0,0.12);
+    }
+
+    .pulse-dot {
+      animation: pulse-animation 2s infinite;
+    }
+    @keyframes pulse-animation {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(78, 107, 80, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 7px rgba(78, 107, 80, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(78, 107, 80, 0); }
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F3E9DA;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #D95D24;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-tjpumpkin selection:text-white">
+
+  <!-- Fearless Flyer Header Bar -->
+  <div class="bg-tjrust text-tjcream px-4 py-2 text-xs md:text-sm font-bold tracking-wider text-center border-b-2 border-tjcinnamon flex items-center justify-center gap-2 flex-wrap shadow-inner">
+    <span>🎃 CREW-SHARED BULLETIN</span>
+    <span class="hidden sm:inline">•</span>
+    <span>COMMUNITY TASTING RATINGS LIVE</span>
+    <span class="hidden sm:inline">•</span>
+    <span class="inline-flex items-center gap-1 bg-emerald-900/60 px-2 py-0.5 rounded text-emerald-200 text-xs">
+      <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-dot"></span>
+      <span id="liveStatusText">Connecting to Cloud...</span>
+    </span>
+  </div>
+
+  <!-- Header Section -->
+  <header class="bg-gradient-to-b from-tjcream to-[#EFE4D2] border-b-4 border-tjpumpkin shadow-sm relative overflow-hidden">
+    <div class="absolute -left-10 -top-10 text-9xl text-orange-200/40 select-none pointer-events-none">🍁</div>
+    <div class="absolute right-4 top-1 text-8xl text-amber-200/40 select-none pointer-events-none">🍂</div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 md:py-9 relative z-10">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100 border border-orange-300 text-tjcinnamon text-xs uppercase font-bold tracking-widest mb-2">
+            <i class="fa-solid fa-people-group text-tjpumpkin"></i> Shared Tasting Panel
+          </div>
+          <h1 class="tj-heading text-4xl sm:text-5xl lg:text-6xl font-black text-tjcinnamon tracking-tight">
+            TJ's Fall <span class="text-tjpumpkin underline decoration-wavy decoration-tjyellow">Community</span> Rater
+          </h1>
+          <p class="mt-2 text-base text-stone-700 max-w-2xl font-medium">
+            Join the neighborhood haul! Leave your tasting notes, see what your friends & family rated, and crown the undisputed champion of the pumpkin season.
+          </p>
+        </div>
+
+        <!-- User Identity Tag & Quick Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          
+          <!-- Name Badge / Switcher -->
+          <div class="bg-white/90 border-2 border-stone-300 rounded-2xl px-4 py-2.5 flex items-center justify-between gap-3 shadow-sm">
+            <div class="flex items-center gap-2.5">
+              <span class="w-8 h-8 rounded-full bg-orange-100 text-tjpumpkin flex items-center justify-center font-bold text-sm">
+                <i class="fa-solid fa-user"></i>
+              </span>
+              <div class="text-left leading-tight">
+                <p class="text-[10px] uppercase tracking-wider text-stone-400 font-bold">Reviewing As</p>
+                <p id="currentUserNameLabel" class="font-bold text-tjcinnamon text-sm truncate max-w-[130px]">Pumpkin Enthusiast</p>
+              </div>
+            </div>
+            <button onclick="promptChangeName()" class="text-xs font-bold text-tjpumpkin hover:text-tjrust underline ml-1">
+              Edit
+            </button>
+          </div>
+
+          <!-- Add Item Button -->
+          <button onclick="openAddItemModal()" class="px-5 py-3 rounded-2xl bg-tjsage text-white font-bold text-sm sm:text-base hover:bg-[#3C543E] transition shadow-md flex items-center justify-center gap-2 border-2 border-[#334635] active:scale-95">
+            <i class="fa-solid fa-circle-plus"></i> Add Fall Find
+          </button>
+        </div>
+      </div>
+
+      <!-- Statistics Dashboard Strip -->
+      <div class="mt-7 grid grid-cols-2 lg:grid-cols-4 gap-3.5">
+        <div class="bg-white/95 rounded-2xl p-3.5 border-2 border-[#E7D7C3] shadow-sm flex items-center gap-3">
+          <div class="w-11 h-11 rounded-xl bg-orange-100 flex items-center justify-center text-2xl text-tjpumpkin flex-shrink-0">
+            🎃
+          </div>
+          <div>
+            <p class="text-[11px] font-bold uppercase tracking-wider text-stone-500">Shared Items</p>
+            <p id="statTotalItems" class="text-2xl font-black text-tjcinnamon">0</p>
+          </div>
+        </div>
+
+        <div class="bg-white/95 rounded-2xl p-3.5 border-2 border-[#E7D7C3] shadow-sm flex items-center gap-3">
+          <div class="w-11 h-11 rounded-xl bg-amber-100 flex items-center justify-center text-2xl text-tjyellow flex-shrink-0">
+            💬
+          </div>
+          <div>
+            <p class="text-[11px] font-bold uppercase tracking-wider text-stone-500">Community Reviews</p>
+            <p id="statTotalReviews" class="text-2xl font-black text-tjcinnamon">0</p>
+          </div>
+        </div>
+
+        <div class="bg-white/95 rounded-2xl p-3.5 border-2 border-[#E7D7C3] shadow-sm flex items-center gap-3">
+          <div class="w-11 h-11 rounded-xl bg-emerald-100 flex items-center justify-center text-2xl text-tjsage flex-shrink-0">
+            🛒
+          </div>
+          <div>
+            <p class="text-[11px] font-bold uppercase tracking-wider text-stone-500">Restock Consensus</p>
+            <p id="statBuyAgainPct" class="text-2xl font-black text-tjsage">--%</p>
+          </div>
+        </div>
+
+        <div class="bg-white/95 rounded-2xl p-3.5 border-2 border-[#E7D7C3] shadow-sm flex items-center gap-3">
+          <div class="w-11 h-11 rounded-xl bg-red-100 flex items-center justify-center text-2xl text-tjred flex-shrink-0">
+            🏆
+          </div>
+          <div class="overflow-hidden">
+            <p class="text-[11px] font-bold uppercase tracking-wider text-stone-500">Community Favorite</p>
+            <p id="statTopItem" class="text-sm font-black text-tjcinnamon truncate">Tasting in progress...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Live Community Ticker (Recent Reviews across the group) -->
+  <div class="bg-[#2A2E2C] text-stone-200 px-4 py-2 border-b-2 border-stone-800 text-xs overflow-hidden">
+    <div class="max-w-7xl mx-auto flex items-center gap-3">
+      <span class="bg-tjpumpkin text-white font-bold uppercase px-2 py-0.5 rounded text-[10px] tracking-wider flex-shrink-0">
+        <i class="fa-solid fa-bolt mr-1"></i> LIVE ACTIVITY
+      </span>
+      <div id="liveTickerText" class="truncate font-medium text-stone-300">
+        Awaiting initial community reviews... Be the first to rate your favorites!
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+
+    <!-- Filters & Sort Toolbar -->
+    <div class="bg-white p-4 sm:p-5 rounded-2xl border-2 border-[#E3D3BE] shadow-sm mb-8 space-y-4">
+      <div class="flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center">
+        
+        <!-- Search Input -->
+        <div class="relative flex-1">
+          <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-stone-400"></i>
+          <input 
+            type="text" 
+            id="searchInput" 
+            oninput="handleFilterChange()" 
+            placeholder="Search items, ingredients (mac & cheese, ravioli, maple, cinnamon)..."
+            class="w-full pl-11 pr-4 py-2.5 rounded-xl border-2 border-stone-200 focus:border-tjpumpkin focus:ring-0 focus:outline-none text-stone-800 placeholder-stone-400 font-medium"
+          />
+        </div>
+
+        <!-- Sort dropdown -->
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <label for="sortSelect" class="text-xs font-bold uppercase tracking-wider text-stone-500 flex items-center gap-1.5 whitespace-nowrap">
+            <i class="fa-solid fa-arrow-down-short-wide text-tjpumpkin"></i> Sort:
+          </label>
+          <select 
+            id="sortSelect" 
+            onchange="handleFilterChange()" 
+            class="bg-stone-50 border-2 border-stone-200 rounded-xl px-3 py-2 text-sm font-semibold text-stone-700 focus:outline-none focus:border-tjpumpkin cursor-pointer">
+            <option value="featured">Featured / Default</option>
+            <option value="highest">Highest Community Rating ⭐</option>
+            <option value="reviews">Most Reviewed 💬</option>
+            <option value="mustbuy">Must Restock %</option>
+            <option value="alpha">Alphabetical (A-Z)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-stone-100">
+        <span class="text-xs font-bold uppercase tracking-wider text-stone-500 mr-1">Aisle:</span>
+        <button onclick="setCategoryFilter('all')" data-category="all" class="category-pill active-pill px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-tjpumpkin text-white shadow-sm transition">
+          🍂 All Aisles (<span id="count-all">0</span>)
+        </button>
+        <button onclick="setCategoryFilter('Bakery & Sweets')" data-category="Bakery & Sweets" class="category-pill px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-white text-stone-700 border border-stone-200 hover:bg-orange-50 transition">
+          🍩 Bakery & Sweets (<span id="count-bakery">0</span>)
+        </button>
+        <button onclick="setCategoryFilter('Savory & Meals')" data-category="Savory & Meals" class="category-pill px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-white text-stone-700 border border-stone-200 hover:bg-orange-50 transition">
+          🧀 Savory & Meals (<span id="count-savory">0</span>)
+        </button>
+        <button onclick="setCategoryFilter('Drinks & Spices')" data-category="Drinks & Spices" class="category-pill px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-white text-stone-700 border border-stone-200 hover:bg-orange-50 transition">
+          ☕ Drinks & Spices (<span id="count-drinks">0</span>)
+        </button>
+        <button onclick="setCategoryFilter('Home & Beauty')" data-category="Home & Beauty" class="category-pill px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-white text-stone-700 border border-stone-200 hover:bg-orange-50 transition">
+          🕯️ Home & Beauty (<span id="count-home">0</span>)
+        </button>
+      </div>
+    </div>
+
+    <!-- Card Grid for TJ's Fall Items -->
+    <div id="itemsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="col-span-full py-20 text-center">
+        <div class="inline-block text-4xl animate-bounce mb-3">🎃</div>
+        <p class="font-bold text-lg text-tjcinnamon">Loading Community Fall Haul...</p>
+      </div>
+    </div>
+
+    <!-- Empty Results Fallback -->
+    <div id="emptyState" class="hidden text-center py-16 px-4 bg-white rounded-3xl border-2 border-dashed border-stone-300 my-4">
+      <div class="text-6xl mb-3">🧺</div>
+      <h3 class="tj-heading text-2xl font-bold text-tjcinnamon">No Fall Finds Found</h3>
+      <p class="text-stone-500 mt-1 max-w-md mx-auto text-sm">
+        Can't find what you're craving? Add it right now so everyone can review it!
+      </p>
+      <button onclick="openAddItemModal()" class="mt-4 px-5 py-2.5 bg-tjpumpkin text-white font-bold text-sm rounded-xl hover:bg-tjrust transition shadow">
+        + Add New Seasonal Item
+      </button>
+    </div>
+  </main>
+
+  <!-- Submit Community Review Modal -->
+  <div id="reviewModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-tjcream w-full max-w-lg rounded-3xl border-4 border-tjcinnamon shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in duration-200">
+      
+      <!-- Modal Header -->
+      <div class="bg-tjrust text-tjcream p-4 sm:p-5 flex items-center justify-between border-b-2 border-tjcinnamon">
+        <div class="flex items-center gap-3">
+          <span id="modalItemIcon" class="text-3xl">🎃</span>
+          <div>
+            <h2 id="modalItemTitle" class="tj-heading text-xl sm:text-2xl font-bold leading-tight">Rate Item</h2>
+            <p id="modalItemCategory" class="text-xs text-orange-200 font-semibold tracking-wider uppercase"></p>
+          </div>
+        </div>
+        <button onclick="closeReviewModal()" class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 overflow-y-auto space-y-6">
+        
+        <!-- Reviewer Nickname -->
+        <div>
+          <label class="block text-xs font-black uppercase tracking-wider text-stone-600 mb-1">
+            Your Name / Reviewer Handle *
+          </label>
+          <input 
+            type="text" 
+            id="modalReviewerName" 
+            placeholder="e.g. Fall Foodie Sam, Trader Joe Fanatic"
+            class="w-full p-2.5 rounded-xl border-2 border-stone-300 focus:border-tjpumpkin focus:outline-none text-stone-800 text-sm font-semibold"
+          />
+        </div>
+
+        <!-- Interactive 5-Pumpkin Scale -->
+        <div class="text-center bg-white p-4 rounded-2xl border-2 border-stone-200 shadow-sm">
+          <label class="block text-xs font-black uppercase tracking-wider text-stone-500 mb-2">Autumn Taste & Vibe Rating</label>
+          <div class="flex items-center justify-center gap-2 text-3xl sm:text-4xl select-none" id="pumpkinRatingRow">
+            <button type="button" class="rating-pumpkin hover:scale-125 transition-transform" data-val="1" onclick="setModalRating(1)">🎃</button>
+            <button type="button" class="rating-pumpkin hover:scale-125 transition-transform" data-val="2" onclick="setModalRating(2)">🎃</button>
+            <button type="button" class="rating-pumpkin hover:scale-125 transition-transform" data-val="3" onclick="setModalRating(3)">🎃</button>
+            <button type="button" class="rating-pumpkin hover:scale-125 transition-transform" data-val="4" onclick="setModalRating(4)">🎃</button>
+            <button type="button" class="rating-pumpkin hover:scale-125 transition-transform" data-val="5" onclick="setModalRating(5)">🎃</button>
+          </div>
+          <p id="modalRatingLabel" class="text-sm font-bold text-tjpumpkin mt-2">Tap a pumpkin to score</p>
+        </div>
+
+        <!-- Would Buy Again Next Fall? -->
+        <div>
+          <label class="block text-xs font-black uppercase tracking-wider text-stone-600 mb-2">
+            Would You Stock Up Next Fall?
+          </label>
+          <div class="grid grid-cols-3 gap-2" id="buyAgainGroup">
+            <button type="button" onclick="setModalBuyAgain('yes')" data-buy="yes" class="buy-again-btn py-2.5 px-3 rounded-xl border-2 border-stone-300 font-bold text-xs sm:text-sm flex flex-col items-center justify-center gap-1 transition">
+              <span class="text-lg">🛒</span>
+              <span>Definite Yes!</span>
+            </button>
+            <button type="button" onclick="setModalBuyAgain('maybe')" data-buy="maybe" class="buy-again-btn py-2.5 px-3 rounded-xl border-2 border-stone-300 font-bold text-xs sm:text-sm flex flex-col items-center justify-center gap-1 transition">
+              <span class="text-lg">🤔</span>
+              <span>Maybe / Mixed</span>
+            </button>
+            <button type="button" onclick="setModalBuyAgain('no')" data-buy="no" class="buy-again-btn py-2.5 px-3 rounded-xl border-2 border-stone-300 font-bold text-xs sm:text-sm flex flex-col items-center justify-center gap-1 transition">
+              <span class="text-lg">🛑</span>
+              <span>Hard Pass</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tasting Tags -->
+        <div>
+          <label class="block text-xs font-black uppercase tracking-wider text-stone-600 mb-2">
+            Tasting Notes Tags (Tap to add)
+          </label>
+          <div class="flex flex-wrap gap-2" id="tastingTagsContainer"></div>
+        </div>
+
+        <!-- Notes Input -->
+        <div>
+          <label for="modalReviewText" class="block text-xs font-black uppercase tracking-wider text-stone-600 mb-2">
+            Your Tasting Notes / Honest Thoughts
+          </label>
+          <textarea 
+            id="modalReviewText" 
+            rows="3" 
+            placeholder="Share what worked, how you prepared it (e.g. air fried), or what to pair it with!" 
+            class="w-full p-3.5 rounded-xl border-2 border-stone-300 focus:border-tjpumpkin focus:outline-none text-stone-800 text-sm font-medium resize-none"></textarea>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="bg-stone-100 p-4 border-t-2 border-stone-200 flex items-center justify-end gap-3">
+        <button type="button" onclick="closeReviewModal()" class="px-4 py-2 rounded-xl bg-white border-2 border-stone-300 font-bold text-stone-700 text-sm hover:bg-stone-50">
+          Cancel
+        </button>
+        <button type="button" id="submitReviewBtn" onclick="submitCommunityReview()" class="px-6 py-2.5 rounded-xl bg-tjpumpkin text-white font-bold text-sm hover:bg-tjrust transition shadow-md flex items-center gap-2">
+          <span>Post Review To Group</span>
+          <i class="fa-solid fa-paper-plane text-xs"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Item Reviews Drawer/Modal -->
+  <div id="itemDetailModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-2xl rounded-3xl border-4 border-tjcinnamon shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      
+      <!-- Detail Header -->
+      <div class="bg-gradient-to-r from-tjcinnamon to-tjrust text-tjcream p-5 flex items-start justify-between">
+        <div class="flex items-center gap-3.5">
+          <div id="detailIcon" class="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center text-3xl">🎃</div>
+          <div>
+            <h2 id="detailName" class="tj-heading text-2xl sm:text-3xl font-bold leading-tight">Item Details</h2>
+            <div class="flex items-center gap-2 mt-0.5 text-xs text-orange-200 font-semibold">
+              <span id="detailCategory">Category</span> • <span id="detailPrice">$0.00</span>
+            </div>
+          </div>
+        </div>
+        <button onclick="closeDetailModal()" class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <!-- Detail Summary Strip -->
+      <div class="bg-orange-50 border-b border-orange-200 p-4 grid grid-cols-3 text-center">
+        <div class="border-r border-orange-200">
+          <p class="text-[10px] font-bold uppercase tracking-wider text-stone-500">Community Score</p>
+          <p id="detailAvgScore" class="text-2xl font-black text-tjpumpkin">0.0</p>
+          <p id="detailAvgPumpkins" class="text-xs">🎃🎃🎃🎃🎃</p>
+        </div>
+        <div class="border-r border-orange-200">
+          <p class="text-[10px] font-bold uppercase tracking-wider text-stone-500">Reviews Count</p>
+          <p id="detailReviewCount" class="text-2xl font-black text-stone-800">0</p>
+          <p class="text-[11px] text-stone-500">foodies tested</p>
+        </div>
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-wider text-stone-500">Would Stock Up</p>
+          <p id="detailRepurchaseRate" class="text-2xl font-black text-tjsage">0%</p>
+          <p class="text-[11px] text-stone-500">approval rate</p>
+        </div>
+      </div>
+
+      <!-- Scrollable Reviews Feed -->
+      <div class="p-5 overflow-y-auto flex-1 space-y-4 bg-[#FBF9F5]">
+        <div class="flex items-center justify-between">
+          <h3 class="font-bold text-stone-800 text-sm tracking-wide uppercase">All Tasting Reviews</h3>
+          <button id="detailLeaveReviewBtn" class="text-xs font-bold text-tjpumpkin hover:underline">
+            + Write Your Review
+          </button>
+        </div>
+
+        <div id="detailReviewsList" class="space-y-3">
+          <!-- Dynamically populated reviews -->
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="p-3 bg-stone-100 border-t border-stone-200 text-right">
+        <button onclick="closeDetailModal()" class="px-5 py-2 rounded-xl bg-stone-200 text-stone-700 font-bold text-sm hover:bg-stone-300 transition">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Custom Item Modal -->
+  <div id="addItemModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-tjcream w-full max-w-lg rounded-3xl border-4 border-tjsage shadow-2xl overflow-hidden flex flex-col">
+      <div class="bg-tjsage text-tjcream p-4 sm:p-5 flex items-center justify-between border-b-2 border-[#374B38]">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">✍️</span>
+          <h2 class="tj-heading text-xl sm:text-2xl font-bold">Add New Seasonal Find</h2>
+        </div>
+        <button onclick="closeAddItemModal()" class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <form id="customItemForm" onsubmit="handleCreateCustomItem(event)" class="p-6 space-y-4">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1">Item Name *</label>
+          <input type="text" id="newItemName" required placeholder="e.g. Pumpkin Ginger Snap Cookies" class="w-full p-3 rounded-xl border-2 border-stone-300 focus:border-tjsage focus:outline-none text-sm font-semibold">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1">Aisle Category</label>
+            <select id="newItemCategory" class="w-full p-3 rounded-xl border-2 border-stone-300 focus:border-tjsage focus:outline-none text-sm font-semibold bg-white">
+              <option value="Bakery & Sweets">Bakery & Sweets</option>
+              <option value="Savory & Meals">Savory & Meals</option>
+              <option value="Drinks & Spices">Drinks & Spices</option>
+              <option value="Home & Beauty">Home & Beauty</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1">Price (Approx)</label>
+            <input type="text" id="newItemPrice" placeholder="$4.29" class="w-full p-3 rounded-xl border-2 border-stone-300 focus:border-tjsage focus:outline-none text-sm font-semibold">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <div class="col-span-1">
+            <label class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1">Emoji Icon</label>
+            <input type="text" id="newItemIcon" maxlength="2" value="🍁" class="w-full p-3 rounded-xl border-2 border-stone-300 text-center text-xl focus:border-tjsage focus:outline-none">
+          </div>
+          <div class="col-span-2">
+            <label class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1">Special Badge</label>
+            <input type="text" id="newItemBadge" placeholder="New Release / Crew Pick" class="w-full p-3 rounded-xl border-2 border-stone-300 text-sm focus:border-tjsage focus:outline-none font-semibold">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-stone-600 mb-1">Product Description</label>
+          <textarea id="newItemDesc" rows="2" placeholder="Rich fall flavors, seasonal spice blend..." class="w-full p-3 rounded-xl border-2 border-stone-300 focus:border-tjsage focus:outline-none text-sm resize-none"></textarea>
+        </div>
+
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeAddItemModal()" class="px-4 py-2 rounded-xl bg-stone-200 font-bold text-stone-700 text-sm">Cancel</button>
+          <button type="submit" id="saveNewItemBtn" class="px-6 py-2 rounded-xl bg-tjsage text-white font-bold text-sm hover:bg-[#344836] shadow transition">Publish to Community</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast notification message container -->
+  <div id="toastNotification" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-tjblackboard text-white px-5 py-3 rounded-2xl shadow-xl flex items-center gap-3 border border-orange-400/30">
+    <span id="toastIcon" class="text-xl">🎃</span>
+    <span id="toastMsg" class="font-bold text-sm">Rating updated!</span>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js';
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js';
+    import { 
+      getFirestore, 
+      collection, 
+      doc, 
+      setDoc, 
+      addDoc, 
+      getDocs, 
+      onSnapshot 
+    } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
+
+    // Firebase environment setup
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'tj-autumn-haul-community';
+    const firebaseConfig = typeof __firebase_config !== 'undefined' 
+      ? JSON.parse(__firebase_config) 
+      : {
+          apiKey: "AIzaSyDummyKeyForFallback",
+          authDomain: "tj-autumn-rater.firebaseapp.com",
+          projectId: "tj-autumn-rater",
+          storageBucket: "tj-autumn-rater.appspot.com",
+          messagingSenderId: "123456789",
+          appId: "1:123456789:web:abcdef123456"
+        };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Initial default catalog of Trader Joe's Autumn staples
+    const DEFAULT_CATALOG = [
+      {
+        slug: "butternut-squash-mac-and-cheese",
+        name: "Butternut Squash Mac & Cheese",
+        category: "Savory & Meals",
+        price: "$3.99",
+        badge: "Seasonal Holy Grail",
+        badgeColor: "bg-tjrust text-white",
+        icon: "🧀",
+        description: "Rigatoni pasta in velvety cheddar, gouda, butternut squash purée, and a hint of warm nutmeg and sage."
+      },
+      {
+        slug: "apple-cider-donuts",
+        name: "Apple Cider Donuts",
+        category: "Bakery & Sweets",
+        price: "$4.49",
+        badge: "Baker's Favorite",
+        badgeColor: "bg-tjyellow text-stone-900",
+        icon: "🍩",
+        description: "Cake donuts tossed in cinnamon sugar, crafted with real apple cider straight from family cider mills."
+      },
+      {
+        slug: "pumpkin-brioche-twist",
+        name: "Pumpkin Brioche Twist",
+        category: "Bakery & Sweets",
+        price: "$4.99",
+        badge: "French Bakery Style",
+        badgeColor: "bg-tjpumpkin text-white",
+        icon: "🍞",
+        description: "Fluffy, butter-rich brioche loaf swirled with cinnamon, fall spices, and real pumpkin purée."
+      },
+      {
+        slug: "pumpkin-flavored-joe-joes",
+        name: "Pumpkin Flavored Joe-Joe's",
+        category: "Bakery & Sweets",
+        price: "$2.99",
+        badge: "Crew Classic",
+        badgeColor: "bg-stone-800 text-white",
+        icon: "🍪",
+        description: "Pumpkin wafer sandwich cookies packed with a sweet pumpkin cream center and ground vanilla beans."
+      },
+      {
+        slug: "honey-roasted-pumpkin-ravioli",
+        name: "Honey Roasted Pumpkin Ravioli",
+        category: "Savory & Meals",
+        price: "$3.99",
+        badge: "Quick Gourmet",
+        badgeColor: "bg-tjsage text-white",
+        icon: "🥟",
+        description: "Tender pasta pockets stuffed with roasted pumpkin, sweet honey, creamy ricotta, and brown sugar."
+      },
+      {
+        slug: "autumn-harvest-soup",
+        name: "Autumn Harvest Soup",
+        category: "Savory & Meals",
+        price: "$4.99",
+        badge: "Cozy Night In",
+        badgeColor: "bg-tjcinnamon text-white",
+        icon: "🥣",
+        description: "A velvety soup made from pumpkin, butternut squash, crushed tomatoes, rosemary, and sweet cream."
+      },
+      {
+        slug: "spiced-cider",
+        name: "Spiced Cider",
+        category: "Drinks & Spices",
+        price: "$3.49",
+        badge: "Harvest Drink",
+        badgeColor: "bg-amber-700 text-white",
+        icon: "🍎",
+        description: "Pure apple juice steeped with orange peel, cinnamon, cloves, allspice, and lemon peel."
+      },
+      {
+        slug: "maple-leaf-cookies",
+        name: "Maple Leaf Cookies",
+        category: "Bakery & Sweets",
+        price: "$3.99",
+        badge: "Cult Follower",
+        badgeColor: "bg-tjpumpkin text-white",
+        icon: "🍁",
+        description: "Leaf-shaped sandwich cookies filled with rich fudge made with 100% pure Canadian maple syrup."
+      },
+      {
+        slug: "fall-zucchette-pasta",
+        name: "Fall Zucchette Pasta",
+        category: "Savory & Meals",
+        price: "$2.29",
+        badge: "Little Pumpkins",
+        badgeColor: "bg-orange-600 text-white",
+        icon: "🎃",
+        description: "Artisan butternut squash pasta extruded into charming miniature pumpkin shapes."
+      },
+      {
+        slug: "pumpkin-body-butter",
+        name: "Pumpkin Body Butter",
+        category: "Home & Beauty",
+        price: "$4.99",
+        badge: "Non-Food Icon",
+        badgeColor: "bg-pink-700 text-white",
+        icon: "🧴",
+        description: "Shea butter and coconut oil with pumpkin seed oil, chamomile, and warm autumn bakery scent."
+      },
+      {
+        slug: "cinnamon-broom",
+        name: "Scented Cinnamon Broom",
+        category: "Home & Beauty",
+        price: "$4.99",
+        badge: "Porch Tradition",
+        badgeColor: "bg-amber-900 text-white",
+        icon: "🧹",
+        description: "Pine straw broom steeped in aromatic cinnamon essential oils for instant fall atmosphere."
+      },
+      {
+        slug: "sweet-cinnamon-hotteok",
+        name: "Sweet Cinnamon Hotteok",
+        category: "Bakery & Sweets",
+        price: "$3.99",
+        badge: "Freezer Gem",
+        badgeColor: "bg-stone-700 text-white",
+        icon: "🥞",
+        description: "Crispy-chewy Korean-style stuffed pancakes oozing with melted brown sugar, cinnamon, and chopped peanuts."
+      }
+    ];
+
+    const ALL_TAGS = [
+      "Must-Stock", "Air Fryer Gold", "Spiced Just Right", "Too Sweet",
+      "Dessert Heaven", "Savory Perfection", "Subtle Spice", "Sauce Magnet",
+      "Overhyped", "Great With Coffee", "Kid Favorite", "10/10 Comfort"
+    ];
+
+    // State Variables
+    let currentUser = null;
+    let reviewerName = localStorage.getItem('tj_reviewer_name') || generateRandomReviewerName();
+    let communityItems = [];
+    let communityReviews = [];
+    let currentCategory = 'all';
+    let activeEditingItemId = null;
+    let modalRatingState = 0;
+    let modalBuyAgainState = null;
+    let modalSelectedTags = [];
+
+    // Make functions globally accessible to window for HTML event handlers
+    window.setCategoryFilter = setCategoryFilter;
+    window.handleFilterChange = handleFilterChange;
+    window.openReviewModal = openReviewModal;
+    window.closeReviewModal = closeReviewModal;
+    window.setModalRating = setModalRating;
+    window.setModalBuyAgain = setModalBuyAgain;
+    window.toggleTag = toggleTag;
+    window.submitCommunityReview = submitCommunityReview;
+    window.openDetailModal = openDetailModal;
+    window.closeDetailModal = closeDetailModal;
+    window.openAddItemModal = openAddItemModal;
+    window.closeAddItemModal = closeAddItemModal;
+    window.handleCreateCustomItem = handleCreateCustomItem;
+    window.promptChangeName = promptChangeName;
+
+    function generateRandomReviewerName() {
+      const adjectives = ["Pumpkin", "Spiced", "Cinnamon", "Autumn", "Maple", "Cozy", "Golden", "Crisp"];
+      const nouns = ["Gourmet", "Shopper", "Baker", "Taster", "Foodie", "Nibbler", "Chevalier"];
+      const rName = `${adjectives[Math.floor(Math.random() * adjectives.length)]} ${nouns[Math.floor(Math.random() * nouns.length)]} ${Math.floor(Math.random() * 89 + 10)}`;
+      localStorage.setItem('tj_reviewer_name', rName);
+      return rName;
+    }
+
+    function updateUserNameUI() {
+      document.getElementById('currentUserNameLabel').innerText = reviewerName;
+    }
+
+    function promptChangeName() {
+      const newName = prompt("Enter your reviewer name or nickname for the group:", reviewerName);
+      if (newName && newName.trim()) {
+        reviewerName = newName.trim();
+        localStorage.setItem('tj_reviewer_name', reviewerName);
+        updateUserNameUI();
+        showToast(`Reviewing as "${reviewerName}"`);
+      }
+    }
+
+    // Initialize Auth & Firestore
+    async function startApp() {
+      updateUserNameUI();
+      try {
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
+        }
+      } catch (err) {
+        console.warn("Auth initialization note:", err);
+      }
+
+      onAuthStateChanged(auth, (user) => {
+        currentUser = user;
+        if (user) {
+          document.getElementById('liveStatusText').innerText = "Live Cloud Connected";
+          document.getElementById('liveStatusText').parentElement.classList.replace('bg-emerald-900/60', 'bg-emerald-800');
+          subscribeToCloudData();
+        }
+      });
+    }
+
+    function subscribeToCloudData() {
+      if (!currentUser) return;
+
+      // Strict Firestore path for public shared data:
+      const itemsCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'fall_items');
+      const reviewsCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'fall_reviews');
+
+      // Listen for Items
+      onSnapshot(itemsCollectionRef, (snapshot) => {
+        if (snapshot.empty) {
+          // Auto-seed default catalog if cloud is completely fresh
+          seedDefaultCatalog();
+        } else {
+          communityItems = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+          renderCategoryCounts();
+          renderItems();
+          updateDashboardStats();
+        }
+      }, (error) => {
+        console.error("Items listener error:", error);
+      });
+
+      // Listen for Reviews
+      onSnapshot(reviewsCollectionRef, (snapshot) => {
+        communityReviews = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        renderItems();
+        updateDashboardStats();
+        updateLiveTicker();
+      }, (error) => {
+        console.error("Reviews listener error:", error);
+      });
+    }
+
+    // Seed default items into public Firestore collection
+    async function seedDefaultCatalog() {
+      const itemsCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'fall_items');
+      for (const item of DEFAULT_CATALOG) {
+        try {
+          await addDoc(itemsCollectionRef, {
+            ...item,
+            createdAt: new Date().toISOString()
+          });
+        } catch (e) {
+          console.error("Error seeding item:", e);
+        }
+      }
+    }
+
+    function calculateItemMetrics(itemId) {
+      const reviews = communityReviews.filter(r => r.itemId === itemId);
+      const reviewCount = reviews.length;
+      if (reviewCount === 0) {
+        return {
+          avgRating: 0,
+          reviewCount: 0,
+          buyAgainPct: 0,
+          reviews: []
+        };
+      }
+      const sum = reviews.reduce((acc, r) => acc + (Number(r.rating) || 0), 0);
+      const avgRating = (sum / reviewCount).toFixed(1);
+      const buys = reviews.filter(r => r.buyAgain === 'yes').length;
+      const buyAgainPct = Math.round((buys / reviewCount) * 100);
+
+      // Sort recent reviews first
+      const sortedReviews = [...reviews].sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
+      return {
+        avgRating,
+        reviewCount,
+        buyAgainPct,
+        reviews: sortedReviews
+      };
+    }
+
+    function renderItems() {
+      const grid = document.getElementById('itemsGrid');
+      const empty = document.getElementById('emptyState');
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+      const sortBy = document.getElementById('sortSelect').value;
+
+      let filtered = communityItems.filter(item => {
+        const matchesCategory = (currentCategory === 'all') || (item.category === currentCategory);
+        const matchesSearch = item.name.toLowerCase().includes(searchTerm) || 
+                              (item.description && item.description.toLowerCase().includes(searchTerm));
+        return matchesCategory && matchesSearch;
+      });
+
+      // Sort items based on calculated collective community metrics
+      filtered.sort((a, b) => {
+        const statsA = calculateItemMetrics(a.id);
+        const statsB = calculateItemMetrics(b.id);
+
+        if (sortBy === 'highest') {
+          return (Number(statsB.avgRating) || 0) - (Number(statsA.avgRating) || 0);
+        } else if (sortBy === 'reviews') {
+          return statsB.reviewCount - statsA.reviewCount;
+        } else if (sortBy === 'mustbuy') {
+          return statsB.buyAgainPct - statsA.buyAgainPct;
+        } else if (sortBy === 'alpha') {
+          return a.name.localeCompare(b.name);
+        }
+        return 0; // Default featured order
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+
+      empty.classList.add('hidden');
+
+      grid.innerHTML = filtered.map(item => {
+        const stats = calculateItemMetrics(item.id);
+        
+        // Render pumpkin visualization
+        let pumpkins = '';
+        const numericRating = Math.round(Number(stats.avgRating) || 0);
+        for (let i = 1; i <= 5; i++) {
+          pumpkins += `<span class="${i <= numericRating ? 'text-tjpumpkin' : 'opacity-25 grayscale'}">🎃</span>`;
+        }
+
+        // Repurchase badge
+        let repurchaseBadge = '';
+        if (stats.reviewCount > 0) {
+          if (stats.buyAgainPct >= 70) {
+            repurchaseBadge = `<span class="text-[11px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-md border border-emerald-300">
+              <i class="fa-solid fa-check mr-1"></i> ${stats.buyAgainPct}% Restock
+            </span>`;
+          } else if (stats.buyAgainPct >= 40) {
+            repurchaseBadge = `<span class="text-[11px] font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-md border border-amber-300">
+              <i class="fa-solid fa-scale-balanced mr-1"></i> ${stats.buyAgainPct}% Restock
+            </span>`;
+          } else {
+            repurchaseBadge = `<span class="text-[11px] font-bold text-red-800 bg-red-100 px-2 py-0.5 rounded-md border border-red-300">
+              <i class="fa-solid fa-xmark mr-1"></i> ${stats.buyAgainPct}% Restock
+            </span>`;
+          }
+        }
+
+        // Preview snippet of the latest community review
+        const latestReview = stats.reviews[0];
+        let latestReviewSnippet = '';
+        if (latestReview) {
+          latestReviewSnippet = `
+            <div class="bg-[#F8F2E6] border border-[#E4D5C0] rounded-xl p-2.5 text-xs text-stone-700 relative">
+              <div class="flex items-center justify-between text-[11px] font-bold text-tjcinnamon mb-0.5">
+                <span><i class="fa-solid fa-comment-dots text-tjpumpkin mr-1"></i> ${escapeHtml(latestReview.reviewerName || 'Anonymous')}:</span>
+                <span class="text-stone-400 font-normal">${latestReview.rating}/5 🎃</span>
+              </div>
+              <p class="italic line-clamp-2">"${escapeHtml(latestReview.review || 'No written notes')}"</p>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="grocery-card rounded-3xl p-5 flex flex-col justify-between shadow-sm">
+            <div>
+              <div class="flex items-start justify-between gap-2 mb-2">
+                <span class="stamp-badge text-[10px] font-black px-2.5 py-0.5 rounded-full ${item.badgeColor || 'bg-tjpumpkin text-white'}">
+                  ${escapeHtml(item.badge || 'Fall Find')}
+                </span>
+                <span class="font-bold text-xs text-stone-600 bg-stone-100 px-2 py-0.5 rounded-md border border-stone-200">
+                  ${escapeHtml(item.price || '$3.99')}
+                </span>
+              </div>
+
+              <!-- Product identity -->
+              <div class="flex items-center gap-3 my-2 cursor-pointer" onclick="openDetailModal('${item.id}')">
+                <div class="w-12 h-12 rounded-2xl bg-orange-50 border border-orange-200 flex items-center justify-center text-3xl shadow-inner flex-shrink-0">
+                  ${item.icon || '🍂'}
+                </div>
+                <div>
+                  <h3 class="font-bold text-lg text-tjcinnamon leading-snug font-sans hover:text-tjpumpkin transition">
+                    ${escapeHtml(item.name)}
+                  </h3>
+                  <span class="text-xs font-semibold text-stone-400 uppercase tracking-wider">
+                    ${escapeHtml(item.category)}
+                  </span>
+                </div>
+              </div>
+
+              <p class="text-xs text-stone-600 my-2 line-clamp-2">
+                ${escapeHtml(item.description || '')}
+              </p>
+            </div>
+
+            <!-- Card Bottom & Community Breakdown -->
+            <div class="pt-3 border-t border-stone-200 mt-2 space-y-3">
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="flex items-center gap-1 text-base">
+                    ${pumpkins}
+                    <span class="ml-1 text-xs font-black text-stone-700">
+                      ${stats.reviewCount > 0 ? stats.avgRating : '<span class="text-stone-400 font-normal">Unrated</span>'}
+                    </span>
+                  </div>
+                  <p class="text-[10px] font-bold uppercase tracking-wider text-stone-400">
+                    ${stats.reviewCount} ${stats.reviewCount === 1 ? 'Community Review' : 'Community Reviews'}
+                  </p>
+                </div>
+                ${repurchaseBadge}
+              </div>
+
+              ${latestReviewSnippet}
+
+              <!-- Action button pair -->
+              <div class="grid grid-cols-2 gap-2 pt-1">
+                <button onclick="openDetailModal('${item.id}')" class="py-2 px-3 rounded-xl bg-white hover:bg-stone-50 border border-stone-300 font-bold text-xs text-stone-700 flex items-center justify-center gap-1.5 transition">
+                  <i class="fa-regular fa-comments text-stone-500"></i> Reviews (${stats.reviewCount})
+                </button>
+                <button onclick="openReviewModal('${item.id}')" class="py-2 px-3 rounded-xl bg-orange-100 hover:bg-orange-200 border border-orange-300 font-bold text-xs text-tjcinnamon flex items-center justify-center gap-1.5 transition active:scale-95">
+                  <i class="fa-solid fa-plus text-tjpumpkin"></i> Rate Item
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openReviewModal(itemId) {
+      const item = communityItems.find(i => i.id === itemId);
+      if (!item) return;
+
+      activeEditingItemId = itemId;
+      modalRatingState = 5;
+      modalBuyAgainState = 'yes';
+      modalSelectedTags = [];
+
+      document.getElementById('modalItemTitle').innerText = item.name;
+      document.getElementById('modalItemCategory').innerText = item.category + ' • ' + (item.price || '');
+      document.getElementById('modalItemIcon').innerText = item.icon || '🍂';
+      document.getElementById('modalReviewerName').value = reviewerName;
+      document.getElementById('modalReviewText').value = '';
+
+      updateModalRatingUI();
+      updateModalBuyAgainUI();
+      renderModalTagsUI();
+
+      document.getElementById('reviewModal').classList.remove('hidden');
+    }
+
+    function closeReviewModal() {
+      document.getElementById('reviewModal').classList.add('hidden');
+      activeEditingItemId = null;
+    }
+
+    function setModalRating(val) {
+      modalRatingState = val;
+      updateModalRatingUI();
+    }
+
+    function updateModalRatingUI() {
+      const row = document.getElementById('pumpkinRatingRow');
+      const buttons = row.querySelectorAll('.rating-pumpkin');
+      const label = document.getElementById('modalRatingLabel');
+
+      const labels = [
+        "Tap a pumpkin to score",
+        "1/5 - Leave it on the shelf 🛑",
+        "2/5 - Not quite there 🍂",
+        "3/5 - Solid autumn snack ☕",
+        "4/5 - Delicious seasonal staple! 🍁",
+        "5/5 - Absolute Fall Perfection! 🎃✨"
+      ];
+
+      buttons.forEach(btn => {
+        const val = parseInt(btn.getAttribute('data-val'));
+        if (val <= modalRatingState) {
+          btn.style.opacity = '1';
+          btn.style.filter = 'none';
+        } else {
+          btn.style.opacity = '0.3';
+          btn.style.filter = 'grayscale(100%)';
+        }
+      });
+
+      label.innerText = labels[modalRatingState] || labels[0];
+    }
+
+    function setModalBuyAgain(val) {
+      modalBuyAgainState = val;
+      updateModalBuyAgainUI();
+    }
+
+    function updateModalBuyAgainUI() {
+      const group = document.getElementById('buyAgainGroup');
+      const buttons = group.querySelectorAll('.buy-again-btn');
+
+      buttons.forEach(btn => {
+        const type = btn.getAttribute('data-buy');
+        if (type === modalBuyAgainState) {
+          if (type === 'yes') {
+            btn.className = "buy-again-btn py-2.5 px-3 rounded-xl border-2 border-emerald-600 bg-emerald-100 text-emerald-950 font-bold text-xs sm:text-sm flex flex-col items-center justify-center gap-1 shadow-sm";
+          } else if (type === 'maybe') {
+            btn.className = "buy-again-btn py-2.5 px-3 rounded-xl border-2 border-amber-500 bg-amber-100 text-amber-950 font-bold text-xs sm:text-sm flex flex-col items-center justify-center gap-1 shadow-sm";
+          } else {
+            btn.className = "buy-again-btn py-2.5 px-3 rounded-xl border-2 border-red-500 bg-red-100 text-red-950 font-bold text-xs sm:text-sm flex flex-col items-center justify-center gap-1 shadow-sm";
+          }
+        } else {
+          btn.className = "buy-again-btn py-2.5 px-3 rounded-xl border-2 border-stone-200 bg-white hover:bg-stone-50 text-stone-600 font-bold text-xs sm:text-sm flex flex-col items-center justify-center gap-1 transition";
+        }
+      });
+    }
+
+    function renderModalTagsUI() {
+      const container = document.getElementById('tastingTagsContainer');
+      container.innerHTML = ALL_TAGS.map(tag => {
+        const isSelected = modalSelectedTags.includes(tag);
+        return `
+          <button 
+            type="button" 
+            onclick="toggleTag('${tag}')" 
+            class="px-2.5 py-1 rounded-lg text-xs font-bold transition border ${
+              isSelected 
+                ? 'bg-tjpumpkin text-white border-tjrust shadow-sm' 
+                : 'bg-white text-stone-600 border-stone-300 hover:bg-orange-50'
+            }">
+            ${isSelected ? '✓ ' : '+ '}${tag}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function toggleTag(tag) {
+      if (modalSelectedTags.includes(tag)) {
+        modalSelectedTags = modalSelectedTags.filter(t => t !== tag);
+      } else {
+        modalSelectedTags.push(tag);
+      }
+      renderModalTagsUI();
+    }
+
+    async function submitCommunityReview() {
+      if (!activeEditingItemId || !currentUser) {
+        showToast("Waiting on database connection...");
+        return;
+      }
+
+      const inputName = document.getElementById('modalReviewerName').value.trim();
+      if (inputName) {
+        reviewerName = inputName;
+        localStorage.setItem('tj_reviewer_name', reviewerName);
+        updateUserNameUI();
+      }
+
+      const reviewText = document.getElementById('modalReviewText').value.trim();
+      const targetItem = communityItems.find(i => i.id === activeEditingItemId);
+      const submitBtn = document.getElementById('submitReviewBtn');
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Posting...";
+
+      try {
+        const reviewsCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'fall_reviews');
+        await addDoc(reviewsCollectionRef, {
+          itemId: activeEditingItemId,
+          itemName: targetItem ? targetItem.name : "Fall Item",
+          userId: currentUser.uid,
+          reviewerName: reviewerName,
+          rating: modalRatingState,
+          buyAgain: modalBuyAgainState || 'yes',
+          tags: [...modalSelectedTags],
+          review: reviewText,
+          createdAt: new Date().toISOString()
+        });
+
+        closeReviewModal();
+        showToast(`Review posted for ${targetItem?.name || 'item'}!`);
+        if (modalRatingState === 5) {
+          triggerPumpkinCheer();
+        }
+      } catch (err) {
+        console.error("Error submitting review:", err);
+        showToast("Error saving review. Please retry.");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<span>Post Review To Group</span> <i class="fa-solid fa-paper-plane text-xs"></i>`;
+      }
+    }
+
+    function openDetailModal(itemId) {
+      const item = communityItems.find(i => i.id === itemId);
+      if (!item) return;
+
+      const stats = calculateItemMetrics(itemId);
+
+      document.getElementById('detailName').innerText = item.name;
+      document.getElementById('detailCategory').innerText = item.category;
+      document.getElementById('detailPrice').innerText = item.price || '$3.99';
+      document.getElementById('detailIcon').innerText = item.icon || '🍂';
+      document.getElementById('detailAvgScore').innerText = stats.reviewCount > 0 ? stats.avgRating : '--';
+      document.getElementById('detailReviewCount').innerText = stats.reviewCount;
+      document.getElementById('detailRepurchaseRate').innerText = stats.reviewCount > 0 ? `${stats.buyAgainPct}%` : '--%';
+
+      // Stars
+      let stars = '';
+      for (let i = 1; i <= 5; i++) {
+        stars += i <= Math.round(Number(stats.avgRating) || 0) ? '🎃' : '🍂';
+      }
+      document.getElementById('detailAvgPumpkins').innerText = stars;
+
+      const leaveBtn = document.getElementById('detailLeaveReviewBtn');
+      leaveBtn.onclick = () => {
+        closeDetailModal();
+        openReviewModal(itemId);
+      };
+
+      const reviewsContainer = document.getElementById('detailReviewsList');
+      if (stats.reviews.length === 0) {
+        reviewsContainer.innerHTML = `
+          <div class="text-center py-10 bg-white rounded-2xl border border-stone-200">
+            <div class="text-4xl mb-2">🍁</div>
+            <p class="font-bold text-stone-700">No community reviews yet!</p>
+            <p class="text-xs text-stone-500 mt-0.5">Be the first crew member to share your verdict on this item.</p>
+            <button onclick="closeDetailModal(); openReviewModal('${itemId}')" class="mt-3 px-4 py-2 bg-tjpumpkin text-white font-bold text-xs rounded-xl shadow">
+              Write The First Review
+            </button>
+          </div>
+        `;
+      } else {
+        reviewsContainer.innerHTML = stats.reviews.map(rev => {
+          let revStars = '';
+          for (let i = 1; i <= 5; i++) {
+            revStars += i <= (rev.rating || 0) ? '🎃' : '🍂';
+          }
+          const verdictColor = rev.buyAgain === 'yes' ? 'text-emerald-700 bg-emerald-100 border-emerald-200' : (rev.buyAgain === 'no' ? 'text-red-700 bg-red-100 border-red-200' : 'text-amber-700 bg-amber-100 border-amber-200');
+          const verdictLabel = rev.buyAgain === 'yes' ? 'Stock Up!' : (rev.buyAgain === 'no' ? 'Pass' : 'Maybe');
+
+          const tagsHtml = (rev.tags || []).map(t => `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-stone-100 text-stone-600 border border-stone-200">#${escapeHtml(t)}</span>`).join(' ');
+
+          const dateStr = rev.createdAt ? new Date(rev.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'Recently';
+
+          return `
+            <div class="bg-white p-4 rounded-2xl border border-stone-200 shadow-sm space-y-2">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-full bg-orange-100 text-tjpumpkin flex items-center justify-center font-bold text-xs">
+                    ${escapeHtml(rev.reviewerName ? rev.reviewerName.charAt(0) : 'U')}
+                  </div>
+                  <div>
+                    <p class="font-bold text-stone-800 text-xs">${escapeHtml(rev.reviewerName || 'Anonymous Foodie')}</p>
+                    <p class="text-[10px] text-stone-400">${dateStr}</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <div class="text-xs" title="${rev.rating} of 5">${revStars}</div>
+                  <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded border inline-block mt-0.5 ${verdictColor}">${verdictLabel}</span>
+                </div>
+              </div>
+
+              ${rev.review ? `<p class="text-xs text-stone-700 italic">"${escapeHtml(rev.review)}"</p>` : ''}
+
+              ${tagsHtml ? `<div class="flex flex-wrap gap-1 pt-1">${tagsHtml}</div>` : ''}
+            </div>
+          `;
+        }).join('');
+      }
+
+      document.getElementById('itemDetailModal').classList.remove('hidden');
+    }
+
+    function closeDetailModal() {
+      document.getElementById('itemDetailModal').classList.add('hidden');
+    }
+
+    function openAddItemModal() {
+      document.getElementById('customItemForm').reset();
+      document.getElementById('newItemIcon').value = '🍂';
+      document.getElementById('addItemModal').classList.remove('hidden');
+    }
+
+    function closeAddItemModal() {
+      document.getElementById('addItemModal').classList.add('hidden');
+    }
+
+    async function handleCreateCustomItem(e) {
+      e.preventDefault();
+      if (!currentUser) {
+        showToast("Please wait for cloud synchronization...");
+        return;
+      }
+
+      const name = document.getElementById('newItemName').value.trim();
+      const category = document.getElementById('newItemCategory').value;
+      const price = document.getElementById('newItemPrice').value.trim() || '$3.99';
+      const icon = document.getElementById('newItemIcon').value.trim() || '🍂';
+      const badge = document.getElementById('newItemBadge').value.trim() || 'Community Find';
+      const desc = document.getElementById('newItemDesc').value.trim() || 'Seasonal autumn discovery submitted by tasting community.';
+
+      if (!name) return;
+
+      const saveBtn = document.getElementById('saveNewItemBtn');
+      saveBtn.disabled = true;
+      saveBtn.innerText = "Publishing...";
+
+      try {
+        const itemsCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'fall_items');
+        await addDoc(itemsCollectionRef, {
+          name,
+          category,
+          price,
+          icon,
+          badge,
+          badgeColor: "bg-tjsage text-white",
+          description: desc,
+          createdAt: new Date().toISOString(),
+          addedBy: reviewerName
+        });
+
+        closeAddItemModal();
+        showToast(`Published "${name}" to community board!`);
+      } catch (err) {
+        console.error("Error creating item:", err);
+        showToast("Failed to publish item.");
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerText = "Publish to Community";
+      }
+    }
+
+    function updateDashboardStats() {
+      document.getElementById('statTotalItems').innerText = communityItems.length;
+      document.getElementById('statTotalReviews').innerText = communityReviews.length;
+
+      if (communityReviews.length > 0) {
+        const buys = communityReviews.filter(r => r.buyAgain === 'yes').length;
+        const buyPct = Math.round((buys / communityReviews.length) * 100);
+        document.getElementById('statBuyAgainPct').innerText = `${buyPct}%`;
+
+        // Calculate item with highest aggregate score (minimum 1 review)
+        let bestItem = null;
+        let highestAvg = -1;
+
+        communityItems.forEach(item => {
+          const stats = calculateItemMetrics(item.id);
+          if (stats.reviewCount > 0 && Number(stats.avgRating) > highestAvg) {
+            highestAvg = Number(stats.avgRating);
+            bestItem = item;
+          }
+        });
+
+        if (bestItem) {
+          document.getElementById('statTopItem').innerText = `${bestItem.icon || '🎃'} ${bestItem.name}`;
+        }
+      } else {
+        document.getElementById('statBuyAgainPct').innerText = "--%";
+        document.getElementById('statTopItem').innerText = "Awaiting reviews";
+      }
+    }
+
+    function updateLiveTicker() {
+      if (communityReviews.length === 0) return;
+      const recent = [...communityReviews].sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))[0];
+      if (recent) {
+        const date = recent.createdAt ? new Date(recent.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'just now';
+        document.getElementById('liveTickerText').innerHTML = `
+          <strong>${escapeHtml(recent.reviewerName || 'A Foodie')}</strong> rated <strong>${escapeHtml(recent.itemName || 'an item')}</strong> ${recent.rating}/5 🎃 ("${escapeHtml(recent.review || (recent.buyAgain === 'yes' ? 'Must stock up!' : 'Seasonal find'))}") <span class="opacity-60 text-[10px]">• ${date}</span>
+        `;
+      }
+    }
+
+    function renderCategoryCounts() {
+      const counts = {
+        all: communityItems.length,
+        'Bakery & Sweets': 0,
+        'Savory & Meals': 0,
+        'Drinks & Spices': 0,
+        'Home & Beauty': 0
+      };
+
+      communityItems.forEach(i => {
+        if (counts[i.category] !== undefined) {
+          counts[i.category]++;
+        }
+      });
+
+      document.getElementById('count-all').innerText = counts.all;
+      document.getElementById('count-bakery').innerText = counts['Bakery & Sweets'];
+      document.getElementById('count-savory').innerText = counts['Savory & Meals'];
+      document.getElementById('count-drinks').innerText = counts['Drinks & Spices'];
+      document.getElementById('count-home').innerText = counts['Home & Beauty'];
+    }
+
+    function setCategoryFilter(category) {
+      currentCategory = category;
+      const pills = document.querySelectorAll('.category-pill');
+      pills.forEach(p => {
+        if (p.getAttribute('data-category') === category) {
+          p.classList.remove('bg-white', 'text-stone-700', 'border-stone-200');
+          p.classList.add('bg-tjpumpkin', 'text-white', 'shadow-sm');
+        } else {
+          p.classList.remove('bg-tjpumpkin', 'text-white', 'shadow-sm');
+          p.classList.add('bg-white', 'text-stone-700', 'border-stone-200');
+        }
+      });
+      renderItems();
+    }
+
+    function handleFilterChange() {
+      renderItems();
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toastNotification');
+      document.getElementById('toastMsg').innerText = message;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 2800);
+    }
+
+    function triggerPumpkinCheer() {
+      try {
+        confetti({
+          particleCount: 50,
+          spread: 60,
+          origin: { y: 0.7 },
+          colors: ['#D95D24', '#A83A1B', '#EAA43A', '#4E6B50']
+        });
+      } catch (e) {}
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // Launch app once DOM is ready
+    window.addEventListener('DOMContentLoaded', () => {
+      startApp();
+    });
+  </script>
+</body>
+</html>
